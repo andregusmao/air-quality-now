@@ -1,4 +1,4 @@
-import React, { useState, FormEventHandler, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
