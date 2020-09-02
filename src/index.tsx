@@ -4,7 +4,20 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 import get from './service';
 
-import './styles.css';
+import {
+    Root,
+    Header,
+    Container,
+    Group,
+    Label,
+    City,
+    Button,
+    Result,
+    Location,
+    Quality,
+    Error,
+    Map
+} from './styles';
 
 interface ILocation {
     lat: number;
@@ -25,7 +38,7 @@ const App = () => {
         lat: -3.745,
         lng: -38.523
     });
-    const [zoom, setZoom] = useState<number>(10);
+    const [zoom, setZoom] = useState<number>(25);
 
     const containerStyle = {
         width: '400px',
@@ -47,7 +60,7 @@ const App = () => {
                 lat: value.data.data.city.geo[0],
                 lng: value.data.data.city.geo[1]
             });
-            setZoom(10);
+            setZoom(15);
         }
     }
 
@@ -100,37 +113,37 @@ const App = () => {
     }, [city]);
 
     return (
-        <div className="root">
-            <div className="header">Air Quality Now</div>
-            <div className="container">
+        <Root>
+            <Header>Air Quality Now</Header>
+            <Container>
                 <form method="post" onSubmit={getQualityData}>
-                    <div className="group">
-                        <label htmlFor="city">Cidade</label>
-                        <input
+                    <Group>
+                        <Label htmlFor="city">Cidade</Label>
+                        <City
                             type="text"
                             name="city"
                             id="city"
                             className="city"
                             value={city}
                             onChange={e => setCity(e.target.value)} />
-                    </div>
-                    <button type="submit" className="button">Pesquisar</button>
+                    </Group>
+                    <Button type="submit">Pesquisar</Button>
                 </form>
                 {
                     status === 'ok' && (
                         <span>
-                            <div className="result">Estação de medição: <span className="location">{location}</span></div>
-                            <div className="result">Qualidade do ar: <span className="location">{quality}</span><span style={{ color: '#fff', backgroundColor: qualityColor, padding: '0.4rem', borderRadius: '0.4rem', fontWeight: 'bold', marginLeft: '0.8rem' }}>{qualityType}</span></div>
-                            <div className="result">Fonte: {institute} (<a href={instURL} target="_blank">{instURL})</a></div>
+                            <Result>Estação de medição: <Location>{location}</Location></Result>
+                            <Result>Qualidade do ar: <Location>{quality}</Location><Quality style={{ backgroundColor: qualityColor }}>{qualityType}</Quality></Result>
+                            <Result>Fonte: {institute} (<a href={instURL} target="_blank" rel="noopener noreferrer">{instURL})</a></Result>
                         </span>
                     )
                 }
                 {
                     status === 'error' && (
-                        <div className="error">Cidade não localizada</div>
+                        <Error>Cidade não localizada</Error>
                     )
                 }
-                <div className="map" style={{ visibility: status === 'ok' ? 'visible' : 'hidden' }}>
+                <Map style={{ visibility: status === 'ok' ? 'visible' : 'hidden' }}>
                     <LoadScript googleMapsApiKey="AIzaSyD_-qivVEZILE59X-qnvFpV8mCX4xuKQ1A">
                         <GoogleMap
                             id="map"
@@ -143,9 +156,9 @@ const App = () => {
                                 position={center} />
                         </GoogleMap>
                     </LoadScript>
-                </div>
-            </div>
-        </div>
+                </Map>
+            </Container>
+        </Root>
     )
 }
 
